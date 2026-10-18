@@ -1,3 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+allowBuilds:
+  esbuild: false
+catalog:
+  typescript: ^6.0.3
