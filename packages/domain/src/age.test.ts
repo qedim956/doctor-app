@@ -5,7 +5,7 @@ const d = (s: string) => new Date(s);
 
 describe('calcAge', () => {
   it('birthday already passed this year', () => {
-    expect(calcAge(d('1970-05-01'), d('2026-10-19'))).toBe(99);
+    expect(calcAge(d('1970-05-01'), d('2026-10-19'))).toBe(56);
   });
 
   it('birthday not yet this year', () => {
