@@ -1,11 +1,46 @@
-import { calcBmi } from "@clinic/domain";
+import { Suspense } from "react";
+import { PatientForm } from "./patient-form";
+import { DeletePatientButton } from "./delete-patient-button";
 
-export default function Home() {
-  const bmi = calcBmi(78, 172);
+type Patient = {
+  id: string;
+  fullName: string;
+  birthDate: string;
+  sex: string;
+  age: number;
+};
+
+async function PatientList() {
+  const res = await fetch(`${process.env.API_URL}/patients`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Xəstələri yükləmək olmadı");
+  const patients: Patient[] = await res.json();
+
+
+
   return (
-    <main style={{ padding: 32 }}>
-      <h1>Həkim paneli</h1>
-      <p>Domain paketindən BMI: {bmi.toFixed(1)}</p>
+    <ul className="grid gap-2">
+      {patients.map((p) => (
+        <li key={p.id}>
+          {p.fullName}, {p.age} yaş
+          <DeletePatientButton id={p.id} name={p.fullName} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+
+export default async function Home() {
+
+  return (
+    <main style={{ padding: 32, maxWidth: 720, display: "grid", gap: 24 }}>
+      <h1>Xəstələr</h1>
+      <PatientForm />
+      <Suspense fallback={<p className="text-muted-foreground">Yüklənir...</p>}>
+        <PatientList />
+      </Suspense>
     </main>
   );
 }

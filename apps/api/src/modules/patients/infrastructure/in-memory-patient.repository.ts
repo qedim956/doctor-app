@@ -17,4 +17,8 @@ export class InMemoryPatientRepository implements PatientRepository {
   async findAll() {
     return [...this.items.values()];
   }
+
+  async delete(id: string) {
+    return this.items.delete(id);
+  }
 }

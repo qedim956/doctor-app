@@ -10,17 +10,43 @@ describe('PatientsService', () => {
   });
 
   it('registers and finds a patient', async () => {
-    const p = await service.register({ fullName: 'Aysel Məmmədova', birthDate: new Date('1970-05-01'), sex: 'female' });
+    const p = await service.register({
+      fullName: 'Aysel Məmmədova',
+      birthDate: new Date('1970-05-01'),
+      sex: 'female',
+    });
     expect((await service.get(p.id)).id).toBe(p.id);
   });
 
   it('rejects a birth date in the future', async () => {
     await expect(
-      service.register({ fullName: 'Test', birthDate: new Date('2999-01-01'), sex: 'male' }),
+      service.register({
+        fullName: 'Test',
+        birthDate: new Date('2999-01-01'),
+        sex: 'male',
+      }),
     ).rejects.toThrow(DomainError);
   });
 
   it('throws NotFoundError for unknown id', async () => {
-    await expect(service.get('00000000-0000-0000-0000-000000000000')).rejects.toThrow(NotFoundError);
+    await expect(
+      service.get('00000000-0000-0000-0000-000000000000'),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('deleted patient is not listed', async () => {
+    const p = await service.register({
+      fullName: 'Aysel Məmmədova',
+      birthDate: new Date('1970-05-01'),
+      sex: 'female',
+    });
+    await service.delete(p.id);
+    expect(await service.list()).toHaveLength(0);
+  });
+
+  it('throws NotFoundError when deleting unknown id', async () => {
+    await expect(
+      service.delete('00000000-0000-0000-0000-000000000000'),
+    ).rejects.toThrow(NotFoundError);
   });
 });

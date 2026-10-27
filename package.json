@@ -10,7 +10,8 @@
   "devDependencies": {
     "turbo": "^2.11.9",
     "vitest": "^5.0.5",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "zod": "catalog:"
   },
   "packageManager": "pnpm@12.5.1"
 }

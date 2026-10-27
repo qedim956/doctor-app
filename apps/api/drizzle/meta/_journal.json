@@ -8,6 +8,13 @@
       "when": 1792922297956,
       "tag": "0000_robust_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793126909016,
+      "tag": "0001_solid_chat",
+      "breakpoints": true
     }
   ]
 }

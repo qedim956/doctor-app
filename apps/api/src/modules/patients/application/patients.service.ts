@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { NotFoundError } from '../../../common/errors.js';
 import { Patient, Sex } from '../domain/patient.js';
-import { PATIENT_REPOSITORY, type PatientRepository } from '../domain/patient.repository.js';
+import {
+  PATIENT_REPOSITORY,
+  type PatientRepository,
+} from '../domain/patient.repository.js';
 
 @Injectable()
 export class PatientsService {
-  constructor(@Inject(PATIENT_REPOSITORY) private readonly repo: PatientRepository) {}
+  constructor(
+    @Inject(PATIENT_REPOSITORY) private readonly repo: PatientRepository,
+  ) {}
 
   async register(input: { fullName: string; birthDate: Date; sex: Sex }) {
     const patient = Patient.create(input);
@@ -17,6 +22,10 @@ export class PatientsService {
     const patient = await this.repo.findById(id);
     if (!patient) throw new NotFoundError('Xəstə tapılmadı');
     return patient;
+  }
+  async delete(id: string) {
+    const deleted = await this.repo.delete(id);
+   if (!deleted) throw new NotFoundError('Xəstə tapılmadı');
   }
 
   list() {

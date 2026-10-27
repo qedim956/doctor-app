@@ -6,7 +6,12 @@ export type Db = NodePgDatabase;
 
 @Global()
 @Module({
-  providers: [{ provide: DB, useFactory: () => drizzle(process.env.DATABASE_URL!) }],
+  providers: [
+    {
+      provide: DB,
+      useFactory: () => drizzle(process.env.DATABASE_URL!, { logger: true }),
+    },
+  ],
   exports: [DB],
 })
 export class DbModule {}

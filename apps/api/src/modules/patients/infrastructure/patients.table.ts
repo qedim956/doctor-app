@@ -8,4 +8,5 @@ export const patientsTable = pgTable('patients', {
   birthDate: date('birth_date', { mode: 'date' }).notNull(),
   sex: sexEnum('sex').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
 });
