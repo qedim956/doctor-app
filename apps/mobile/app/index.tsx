@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { Link } from 'expo-router';
 import type { Patient } from '@clinic/api-client';
-import { api } from './src/lib/api';
+import { api } from '../src/lib/api';
 
-export default function App() {
+export default function HomeScreen() {
   const [patients, setPatients] = useState<Patient[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +17,6 @@ export default function App() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <StatusBar style="dark" />
-      <Text style={styles.title}>API bağlantı testi</Text>
       <Text style={styles.url}>{process.env.EXPO_PUBLIC_API_URL}</Text>
 
       {error && <Text style={styles.error}>{error}</Text>}
@@ -30,16 +28,20 @@ export default function App() {
           <Text style={styles.meta}>{p.age} yaş</Text>
         </View>
       ))}
+
+      <Link href="/labs" style={styles.link}>
+        Analizlər ekranına keç →
+      </Link>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 24, paddingTop: 72, gap: 12 },
-  title: { fontSize: 22, fontWeight: '700' },
+  container: { padding: 24, gap: 12 },
   url: { color: '#666' },
   error: { color: '#B42318' },
   row: { padding: 14, borderRadius: 12, backgroundColor: '#F1F4F2', gap: 2 },
   name: { fontSize: 16, fontWeight: '600' },
   meta: { color: '#4A5A54' },
+  link: { color: '#0F5C55', fontWeight: '700', marginTop: 12 },
 });
