@@ -1,6 +1,10 @@
-import type { CreatePatientInput } from '@clinic/domain';
-import { ApiError, NetworkError, type FieldError } from './errors.js';
-import type { Patient } from './types.js';
+import type {
+  CreateLabInput,
+  CreatePatientInput,
+  LabType,
+} from "@clinic/domain";
+import { ApiError, NetworkError, type FieldError } from "./errors.js";
+import type { LabResult, Patient } from "./types.js";
 
 export function createApiClient(baseUrl: string) {
   async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -9,18 +13,23 @@ export function createApiClient(baseUrl: string) {
       response = await fetch(`${baseUrl}${path}`, {
         ...init,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...init?.headers,
         },
       });
     } catch (error) {
-      throw new NetworkError('Serverə qoşulmaq olmadı');
+      throw new NetworkError("Serverə qoşulmaq olmadı");
     }
     if (!response.ok) {
-      const errorData = (await response.json().catch(() => null)) as
-        | { message: string; errors?: FieldError[] }
-        | null;
-      throw new ApiError(response.status, errorData?.message || 'Unknown error', errorData?.errors);
+      const errorData = (await response.json().catch(() => null)) as {
+        message: string;
+        errors?: FieldError[];
+      } | null;
+      throw new ApiError(
+        response.status,
+        errorData?.message || "Unknown error",
+        errorData?.errors,
+      );
     }
     if (response.status === 204) {
       return undefined as unknown as T;
@@ -30,18 +39,29 @@ export function createApiClient(baseUrl: string) {
 
   return {
     patients: {
-      list: (init?: RequestInit) => request<Patient[]>('/patients', init),
+      list: (init?: RequestInit) => request<Patient[]>("/patients", init),
       create: (input: CreatePatientInput) => {
-        return request<Patient>('/patients', {
-          method: 'POST',
+        return request<Patient>("/patients", {
+          method: "POST",
           body: JSON.stringify(input),
         });
       },
       remove: (id: string) => {
         return request<void>(`/patients/${id}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
       },
+    },
+    labs: {
+      list: (patientId: string, type?: LabType) => {
+        const query = type ? `?type=${type}` : "";
+        return request<LabResult[]>(`/patients/${patientId}/labs${query}`);
+      },
+      create: (patientId: string, input: CreateLabInput) =>
+        request<LabResult>(`/patients/${patientId}/labs`, {
+          method: "POST",
+          body: JSON.stringify(input),
+        }),
     },
   };
 }
