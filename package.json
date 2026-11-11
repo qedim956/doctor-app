@@ -5,7 +5,9 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "dev": "turbo run dev"
+    "dev": "turbo run dev --filter=!@clinic/mobile",
+    "dev:mobile": "pnpm --filter @clinic/mobile dev",
+    "check": "turbo run lint test build --filter=!@clinic/mobile"
   },
   "devDependencies": {
     "turbo": "^2.11.9",
