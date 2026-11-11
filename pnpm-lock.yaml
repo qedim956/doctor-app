@@ -345,6 +345,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@clinic/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@clinic/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -366,6 +369,19 @@ importers:
         version: 19.3.0
       typescript:
         specifier: ~6.0.3
+        version: 6.0.3
+
+  packages/api-client:
+    dependencies:
+      '@clinic/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      tsup:
+        specifier: ^9.0.0
+        version: 9.0.0(jiti@2.7.0)(postcss@8.5.30)(tsx@4.23.15)(typescript@6.0.3)(yaml@2.9.1)
+      typescript:
+        specifier: 'catalog:'
         version: 6.0.3
 
   packages/domain:
